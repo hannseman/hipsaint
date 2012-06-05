@@ -10,7 +10,7 @@ Inspired by https://gist.github.com/2418848:
 
 At the command line simply run:
 ~~~ sh
-$ python setup.py install:
+$ python setup.py install
 ~~~
 
 ##Documentation
