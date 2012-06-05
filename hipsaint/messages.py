@@ -1,10 +1,11 @@
 import logging
-from jinja2.loaders import FileSystemLoader
-from os import path
 import requests
-from hipsaint.options import COLORS
 import socket
-from jinja2 import Environment, PackageLoader
+from os import path
+from jinja2.loaders import FileSystemLoader
+from jinja2 import Environment
+from hipsaint.options import COLORS
+
 
 class HipchatMessage(object):
     url = "https://api.hipchat.com/v1/rooms/message"
@@ -51,10 +52,10 @@ class HipchatMessage(object):
         elif template_type == 'service':
             servicedesc, hostalias, timestamp, ntype, hostaddress, servicestate, serviceoutput = self.inputs.split('|')
         else:
-            raise Exception, 'Invalid notification type'
+            raise Exception('Invalid notification type')
 
         self.message_color = COLORS.get(ntype) or self.default_color
-        nagios_host    = socket.gethostname().split('.')[0]
+        nagios_host = socket.gethostname().split('.')[0]
 
         template_path = path.realpath(path.join(path.dirname(__file__), 'templates'))
         env = Environment(loader=FileSystemLoader(template_path))

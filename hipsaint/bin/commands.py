@@ -3,6 +3,7 @@ from optparse import OptionParser
 import hipsaint
 from hipsaint.messages import HipchatMessage
 
+
 def main():
     usage = "Usage: %prog [options] [action]..."
 

@@ -1,4 +1,4 @@
-COLORS ={
+COLORS = {
     'PROBLEM': 'red',
     'RECOVERY': 'green',
     'ACKNOWLEDGEMENT': 'green',
