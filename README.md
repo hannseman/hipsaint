@@ -10,6 +10,7 @@ Inspired by https://gist.github.com/2418848
 At the command line run
 ~~~ sh
 $ python setup.py install
+~~~
 
 ##Documentation
 
@@ -27,6 +28,7 @@ Assuming you use Nagios 3 add the following sections to commands.cfg with <TOKEN
 Additional commands is available through:
 ~~~ sh
 $ hipsaint --help
+~~~
 
 Edit the Nagios contacts.cfg file by adding or editing an existing user and adding the notification commands created above:
 
