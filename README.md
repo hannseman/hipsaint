@@ -1,15 +1,16 @@
 #HipSaint
 
 Push your nagios notifications to HipChat using a simple command line tool.
-Implements [HipChat message API](https://www.hipchat.com/docs/api/method/rooms/message)
+
+Implements [HipChat message API](https://www.hipchat.com/docs/api/method/rooms/message).
 
 Inspired by https://gist.github.com/2418848
 
 ##Install
 
-At the command line run
+At the command line simply run
 ~~~ sh
-$ python setup.py install
+$ python setup.py install:
 ~~~
 
 ##Documentation
