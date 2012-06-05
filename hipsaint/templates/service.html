@@ -1,0 +1,6 @@
+<strong>{{ timestamp }} - {{ servicedesc }} on {{ hostalias }} (nagios@{{ nagios_host }})</strong><br/>
+<strong>Type:</strong> {{ ntype }}<br/>
+<strong>Host:</strong> {{ hostalias }} (<a href="{{ hostaddress }}">{{ hostaddress }}</a>)<br/>
+<strong>State:</strong> {{ servicestate }}<br/>
+<strong>Info:</strong>
+<pre>{{ serviceoutput }}</pre>
