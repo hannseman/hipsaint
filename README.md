@@ -1,19 +1,17 @@
-HipSaint
-------
+#HipSaint
 
 Push your nagios notifications to HipChat using a simple command line tool.
 Implements [HipChat message API](https://www.hipchat.com/docs/api/method/rooms/message)
 
 Inspired by https://gist.github.com/2418848
 
-Install
-=============
+##Install
 
 At the command line run
-    python setup.py install
+~~~ sh
+$ python setup.py install
 
-Documentation
-=============
+##Documentation
 
 Assuming you use Nagios 3 add the following sections to commands.cfg with <TOKEN> and <ROOM_ID> specified:
 
@@ -27,7 +25,8 @@ Assuming you use Nagios 3 add the following sections to commands.cfg with <TOKEN
     }
 
 Additional commands is available through:
-    hipsaint --help
+~~~ sh
+$ hipsaint --help
 
 Edit the Nagios contacts.cfg file by adding or editing an existing user and adding the notification commands created above:
 
