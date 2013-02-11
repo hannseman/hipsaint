@@ -54,7 +54,10 @@ class HipchatMessage(object):
         else:
             raise Exception('Invalid notification type')
 
-        self.message_color = COLORS.get(ntype) or self.default_color
+        if ntype != 'PROBLEM':
+            self.message_color = COLORS.get(ntype) or self.default_color
+        else:
+            self.message_color = COLORS.get(servicestate)
         nagios_host = socket.gethostname().split('.')[0]
 
         template_path = path.realpath(path.join(path.dirname(__file__), 'templates'))
