@@ -28,14 +28,13 @@ setup(
     zip_safe=False,
     packages=find_packages(exclude=["examples"]),
     include_package_data=True,
-
+    test_suite='hipsaint.tests',
     install_requires=[
         "Jinja2==2.6",
         "requests==0.13.0"
     ],
-
     entry_points="""
     [console_scripts]
     hipsaint=hipsaint.bin.commands:main
-	"""
+    """
 )

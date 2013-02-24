@@ -18,20 +18,18 @@ class HipchatMessage(object):
         self.user = user
         self.room_id = room_id
         self.notify = notify
-        self.deliver_payload()
 
     def deliver_payload(self):
-        ''' Makes HTTP GET request to HipChat containing the message from nagios
+        """ Makes HTTP GET request to HipChat containing the message from nagios
             according to API Documentation https://www.hipchat.com/docs/api/method/rooms/message
-        '''
+        """
         message_body = self.render_message()
         message = {'room_id': self.room_id,
                    'from': self.user,
                    'message': message_body,
-                   'color':  self.message_color,
+                   'color': self.message_color,
                    'notify': int(self.notify),
-                   'auth_token': self.token
-        }
+                   'auth_token': self.token}
         raw_response = requests.get(self.url, params=message)
         response_data = raw_response.json
         if 'error' in response_data:
@@ -43,21 +41,21 @@ class HipchatMessage(object):
             logging.error('Unexpected response')
 
     def render_message(self):
-        ''' Unpacks Nagios inputs and renders the appropriate template depending
+        """ Unpacks Nagios inputs and renders the appropriate template depending
             on the notification type.
-        '''
+        """
         template_type = self.type
         if template_type == 'host':
-            hostname, timestamp, ntype, hostaddress, hoststate, hostoutput = self.inputs.split('|')
+            hostname, timestamp, ntype, hostaddress, state, hostoutput = self.inputs.split('|')
         elif template_type == 'service':
-            servicedesc, hostalias, timestamp, ntype, hostaddress, servicestate, serviceoutput = self.inputs.split('|')
+            servicedesc, hostalias, timestamp, ntype, hostaddress, state, serviceoutput = self.inputs.split('|')
         else:
             raise Exception('Invalid notification type')
 
         if ntype != 'PROBLEM':
-            self.message_color = COLORS.get(ntype) or self.default_color
+            self.message_color = COLORS.get(ntype, self.default_color)
         else:
-            self.message_color = COLORS.get(servicestate)
+            self.message_color = COLORS.get(state, self.default_color)
         nagios_host = socket.gethostname().split('.')[0]
 
         template_path = path.realpath(path.join(path.dirname(__file__), 'templates'))

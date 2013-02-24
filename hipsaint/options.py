@@ -1,10 +1,10 @@
 COLORS = {
     'PROBLEM': 'red',
     'RECOVERY': 'green',
-    'ACKNOWLEDGEMENT': 'green',
+    'ACKNOWLEDGEMENT': 'purple',
     'FLAPPINGSTART': 'yellow',
     'WARNING': 'yellow',
-    'UNKNOWN': 'purple',
+    'UNKNOWN': 'gray',
     'CRITICAL': 'red',
     'FLAPPINGSTOP': 'green',
     'FLAPPINGDISABLED': 'purple',
