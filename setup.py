@@ -5,23 +5,17 @@ from setuptools import setup, find_packages
 version = __import__('hipsaint').__version__
 
 setup(
-    name             = "hipsaint",
-    version          = version,
+    name="hipsaint",
+    version=version,
 
-    description      = "",
-    long_description = file(
-        os.path.join(
-            os.path.dirname(__file__),
-            "README.md"
-        )
-    ).read(),
-    author           = "Hannes Ljungberg",
-    author_email     = "hannes@5monkeys.se",
-    url              = "http://github.com/hannseman/hipsaint",
-    download_url     = "https://github.com/5monkeys/hipsaint/tarball/%s" % (version,),
-
-    keywords         = ["nagios", "hipchat", "api", "plugin"],
-    classifiers      = [
+    description="Push nagios notifications to HipChat.",
+    author="Hannes Ljungberg",
+    author_email="hannes@5monkeys.se",
+    url="http://github.com/hannseman/hipsaint",
+    download_url="https://github.com/hannseman/hipsaint/tarball/%s" % (version,),
+    keywords=["nagios", "hipchat", "api", "plugin"],
+    license="WTFPL",
+    classifiers=[
         "Programming Language :: Python",
         "Development Status :: 3 - Alpha",
         "Natural Language :: English",
@@ -31,11 +25,11 @@ setup(
         "Topic :: Utilities"
     ],
 
-    zip_safe = False,
-    packages = find_packages(exclude=["examples"]),
-    include_package_data = True,
+    zip_safe=False,
+    packages=find_packages(exclude=["examples"]),
+    include_package_data=True,
 
-    install_requires = [
+    install_requires=[
         "Jinja2==2.6",
         "requests==0.13.0"
     ],
