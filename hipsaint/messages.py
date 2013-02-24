@@ -19,7 +19,7 @@ class HipchatMessage(object):
         self.room_id = room_id
         self.notify = notify
 
-    def deliver_payload(self):
+    def deliver_payload(self, **kwargs):
         """ Makes HTTP GET request to HipChat containing the message from nagios
             according to API Documentation https://www.hipchat.com/docs/api/method/rooms/message
         """
@@ -30,6 +30,7 @@ class HipchatMessage(object):
                    'color': self.message_color,
                    'notify': int(self.notify),
                    'auth_token': self.token}
+        message.update(kwargs)
         raw_response = requests.get(self.url, params=message)
         response_data = raw_response.json
         if 'error' in response_data:
@@ -39,6 +40,7 @@ class HipchatMessage(object):
             logging.error('%s - %s: %s' % (error_code, error_type, error_message))
         elif not 'status' in response_data:
             logging.error('Unexpected response')
+        return raw_response
 
     def render_message(self):
         """ Unpacks Nagios inputs and renders the appropriate template depending

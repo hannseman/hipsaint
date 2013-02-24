@@ -5,4 +5,5 @@
 *~
 build
 *.egg-info
+*.egg
 dist

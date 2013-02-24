@@ -5,6 +5,16 @@ from hipsaint.messages import HipchatMessage
 
 class MessageTest(unittest.TestCase):
 
+    def test_payload_delivery(self):
+        inputs = "hostname|%(longdatetime)s|%(notificationtype)s|127.0.0.1|%(hoststate)s|NAGIOS_OUTPUT"
+        msg_inputs = inputs % {'longdatetime': datetime.now(),
+                               'notificationtype': 'PROBLEM',
+                               'hoststate': 'DOWN'}
+        problem_msg = HipchatMessage('host', msg_inputs, None, None, None, False)
+        problem_msg.url = "http://httpbin.org/response-headers"
+        response = problem_msg.deliver_payload(status="sent", message="")
+        self.assertEqual(response.status_code, 200)
+
     def test_render_host(self):
         message_type = 'host'
         #"$HOSTNAME$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$HOSTSTATE$|$HOSTOUTPUT$" -n
