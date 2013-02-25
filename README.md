@@ -10,12 +10,18 @@ Inspired by https://gist.github.com/2418848
 
 ##Install
 
-At the command line simply run:
+Through pip:
+
+~~~ sh
+$ pip install hipsaint
+~~~
+
+Or clone and simply run:
 ~~~ sh
 $ python setup.py install
 ~~~
 
-##Documentation
+##Usage
 
 Assuming you use Nagios 3 add the following sections to commands.cfg with &lt;TOKEN&gt; and &lt;ROOM_ID&gt; specified:
 

@@ -7,8 +7,7 @@ version = __import__('hipsaint').__version__
 setup(
     name="hipsaint",
     version=version,
-
-    description="Push nagios notifications to HipChat.",
+    description="A command line tool for pushing Nagios host and service notifications to a HipChat room.",
     author="Hannes Ljungberg",
     author_email="hannes@5monkeys.se",
     url="http://github.com/hannseman/hipsaint",
