@@ -6,6 +6,7 @@ from jinja2.loaders import FileSystemLoader
 from jinja2 import Environment
 from hipsaint.options import COLORS
 
+log = logging.getLogger(__name__)
 
 class HipchatMessage(object):
     url = "https://api.hipchat.com/v1/rooms/message"
@@ -37,9 +38,9 @@ class HipchatMessage(object):
             error_message = response_data['error'].get('message')
             error_type = response_data['error'].get('type')
             error_code = response_data['error'].get('code')
-            logging.error('%s - %s: %s' % (error_code, error_type, error_message))
+            log.error('%s - %s: %s', error_code, error_type, error_message)
         elif not 'status' in response_data:
-            logging.error('Unexpected response')
+            log.error('Unexpected response')
         return raw_response
 
     def render_message(self):
