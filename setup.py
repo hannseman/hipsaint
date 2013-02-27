@@ -30,7 +30,7 @@ setup(
     test_suite='hipsaint.tests',
     install_requires=[
         "Jinja2==2.6",
-        "requests==0.13.0"
+        "requests==1.1.0"
     ],
     entry_points="""
     [console_scripts]

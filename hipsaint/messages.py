@@ -8,6 +8,7 @@ from hipsaint.options import COLORS
 
 log = logging.getLogger(__name__)
 
+
 class HipchatMessage(object):
     url = "https://api.hipchat.com/v1/rooms/message"
     default_color = 'red'
@@ -33,7 +34,7 @@ class HipchatMessage(object):
                    'auth_token': self.token}
         message.update(kwargs)
         raw_response = requests.get(self.url, params=message)
-        response_data = raw_response.json
+        response_data = raw_response.json()
         if 'error' in response_data:
             error_message = response_data['error'].get('message')
             error_type = response_data['error'].get('type')
