@@ -6,6 +6,7 @@ from jinja2.loaders import FileSystemLoader
 from jinja2 import Environment
 from hipsaint.options import COLORS
 
+logging.basicConfig()
 log = logging.getLogger(__name__)
 
 
