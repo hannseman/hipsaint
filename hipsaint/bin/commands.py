@@ -32,7 +32,7 @@ def main():
     parser.add_option("-T", "--type",
                       dest="type",
                       default="",
-                      help="Mark if notification is from host group or service group, host|service")
+                      help="Mark if notification is from host group or service group, host|service|short-host|short-service")
 
     parser.add_option("-n", "--notify",
                       action="store_true",
