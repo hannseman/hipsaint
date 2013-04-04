@@ -26,6 +26,11 @@ class MessageTest(unittest.TestCase):
         problem_msg.render_message()
         self.assertEqual(problem_msg.message_color, 'red')
 
+        # Test short host
+        problem_msg = HipchatMessage('short-host', msg_inputs, None, None, None, False)
+        problem_msg.render_message()
+        self.assertEqual(problem_msg.message_color, 'red')
+
         msg_inputs = inputs % {'longdatetime': datetime.now(),
                                'notificationtype': 'RECOVERY',
                                'hoststate': 'UP'}
@@ -62,6 +67,11 @@ class MessageTest(unittest.TestCase):
                                'notificationtype': 'PROBLEM',
                                'servicestate': 'CRITICAL'}
         problem_msg = HipchatMessage(message_type, msg_inputs, None, None, None, False)
+        problem_msg.render_message()
+        self.assertEqual(problem_msg.message_color, 'red')
+
+        # Test short service
+        problem_msg = HipchatMessage('short-service', msg_inputs, None, None, None, False)
         problem_msg.render_message()
         self.assertEqual(problem_msg.message_color, 'red')
 
