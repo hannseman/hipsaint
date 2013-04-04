@@ -34,6 +34,8 @@ Assuming you use Nagios 3 add the following sections to commands.cfg with &lt;TO
         command_line    hipsaint --token=<TOKEN> --room=<ROOM_ID> --type=service --inputs="$SERVICEDESC$|$HOSTALIAS$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$SERVICESTATE$|$SERVICEOUTPUT$" -n
     }
 
+To send less verbose messages to hipchat set the ``--type`` flag to either ``short-host`` or ``short-service``.
+
 Additional commands is available through:
 ~~~ sh
 $ hipsaint --help
