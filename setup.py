@@ -28,6 +28,7 @@ setup(
     packages=find_packages(exclude=["examples"]),
     include_package_data=True,
     test_suite='hipsaint.tests',
+    tests_require=['mock'],
     install_requires=[
         "Jinja2==2.6",
         "requests==1.1.0"
