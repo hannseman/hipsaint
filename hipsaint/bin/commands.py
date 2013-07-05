@@ -48,7 +48,7 @@ def main():
     if not options.inputs:
         parser.error('--inputs is required')
     if not options.room_id:
-        parser.error('--room_id is required')
+        parser.error('--room is required')
     if not options.type:
         parser.error('--type is required')
     msg = HipchatMessage(**vars(options))
