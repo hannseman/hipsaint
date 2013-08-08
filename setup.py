@@ -16,6 +16,7 @@ setup(
     license="WTFPL",
     classifiers=[
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
@@ -29,7 +30,7 @@ setup(
     ],
 
     zip_safe=False,
-    packages=find_packages(exclude=["examples"]),
+    packages=find_packages(),
     include_package_data=True,
     test_suite='hipsaint.tests',
     tests_require=['mock'],
