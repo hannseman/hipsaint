@@ -67,7 +67,7 @@ class HipchatMessage(object):
 
         template_path = path.realpath(path.join(path.dirname(__file__), 'templates'))
         env = Environment(loader=FileSystemLoader(template_path))
-        template = env.get_template('%s.html' % template_type)
+        template = env.get_template('{tmpl}.html'.format(tmpl=template_type))
         context = locals()
         context.pop('self')
         return template.render(**context)

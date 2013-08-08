@@ -15,11 +15,15 @@ setup(
     keywords=["nagios", "hipchat", "api", "plugin"],
     license="WTFPL",
     classifiers=[
-        "Programming Language :: Python",
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
         "Development Status :: 3 - Alpha",
         "Natural Language :: English",
         "Environment :: Console",
         "Intended Audience :: Developers",
+        'Intended Audience :: System Administrators',
         "Operating System :: OS Independent",
         "Topic :: Utilities"
     ],

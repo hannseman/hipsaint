@@ -23,7 +23,7 @@ $ python setup.py install
 
 ##Usage
 
-Assuming you use Nagios 3 add the following sections to commands.cfg with &lt;TOKEN&gt; and &lt;ROOM_ID&gt; specified:
+Assuming you use Nagios 3 add the following sections to commands.cfg with `<TOKEN>` and `<ROOM_ID>` specified and macros delimited by `|`:
 
     define command {
         command_name    notify-host-by-hipchat
