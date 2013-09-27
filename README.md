@@ -3,6 +3,7 @@
 Push your nagios notifications to HipChat using a simple command line tool.
 
 [![Build Status](https://travis-ci.org/hannseman/hipsaint.png?branch=master)](https://travis-ci.org/hannseman/hipsaint)
+[![Downloads](https://pypip.in/d/hipsaint/badge.png)](https://crate.io/package/hipsaint)
 
 Implements [HipChat message API](https://www.hipchat.com/docs/api/method/rooms/message).
 
