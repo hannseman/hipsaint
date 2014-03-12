@@ -35,8 +35,8 @@ setup(
     test_suite='hipsaint.tests',
     tests_require=['mock'],
     install_requires=[
-        "Jinja2==2.6",
-        "requests==1.1.0"
+        "Jinja2>=2.6",
+        "requests>=1.1.0"
     ],
     entry_points="""
     [console_scripts]
