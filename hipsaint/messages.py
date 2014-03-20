@@ -1,6 +1,12 @@
+try:
+    # For Python 3.0 and later
+    from urllib.request import urlopen
+    from urllib.parse import urlencode
+except ImportError as e:
+    # Fall back to Python 2 urllib2
+    from urllib2 import urlopen
+    from urllib import urlencode
 import logging
-import urllib
-import urllib2
 import socket
 import json
 from .options import COLORS
@@ -22,7 +28,7 @@ class HipchatMessage(object):
         self.user = user
         self.room_id = room_id
         self.notify = notify
-        self.message_color = None
+        self.message_color = 'gray'
 
     def deliver_payload(self, **kwargs):
         """
@@ -37,8 +43,9 @@ class HipchatMessage(object):
                    'notify': int(self.notify),
                    'auth_token': self.token}
         message.update(kwargs)
-        message_params = urllib.urlencode(message)
-        raw_response = urllib2.urlopen(self.url, message_params)
+        message_params = urlencode(message)
+        message_params = message_params.encode('utf-8')
+        raw_response = urlopen(self.url, message_params)
         response_data = json.load(raw_response)
         if 'error' in response_data:
             error_message = response_data['error'].get('message')

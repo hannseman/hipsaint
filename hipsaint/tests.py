@@ -1,7 +1,7 @@
 import unittest
 import mock
-import json
 from datetime import datetime
+import json
 from .messages import HipchatMessage
 
 
@@ -24,12 +24,15 @@ def mock_hipchat_error_request(mock_method):
 
 class MessageTest(unittest.TestCase):
     def setUp(self):
-        #"$HOSTNAME$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$HOSTSTATE$|$HOSTOUTPUT$" -n
-        self.host_inputs = 'hostname|%(longdatetime)s|%(notificationtype)s|127.0.0.1|%(hoststate)s|NAGIOS_OUTPUT'
-        #"$SERVICEDESC$|$HOSTALIAS$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$SERVICESTATE$|$SERVICEOUTPUT$"
-        self.service_inputs = 'servicedesc|hostalias|%(longdatetime)s|%(notificationtype)s|127.0.0.1|%(servicestate)s|NAGIOS_OUTPUT'
+        #"$HOSTNAME$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$HOSTSTATE$|$HOSTOUTPUT$"
+        self.host_inputs = 'hostname|%(longdatetime)s|%(notificationtype)s|127.0.0.1|' \
+                           '%(hoststate)s|NAGIOS_OUTPUT'
+        #"$SERVICEDESC$|$HOSTALIAS$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$SERVICESTATE$
+        # |$SERVICEOUTPUT$"
+        self.service_inputs = 'servicedesc|hostalias|%(longdatetime)s|%(notificationtype)s|' \
+                              '127.0.0.1|%(servicestate)s|NAGIOS_OUTPUT'
 
-    @mock.patch('urllib2.urlopen')
+    @mock.patch('hipsaint.messages.urlopen')
     def test_ok_payload_delivery(self, mock_get):
         mock_hipchat_ok_request(mock_get)
         msg_inputs = self.host_inputs % {'longdatetime': datetime.now(),
@@ -41,7 +44,7 @@ class MessageTest(unittest.TestCase):
         response_data = json.load(response)
         self.assertEqual(response_data['status'], 'sent')
 
-    @mock.patch('urllib2.urlopen')
+    @mock.patch('hipsaint.messages.urlopen')
     def test_error_payload_delivery(self, mock_get):
         mock_hipchat_error_request(mock_get)
         msg_inputs = self.host_inputs % {'longdatetime': datetime.now(),

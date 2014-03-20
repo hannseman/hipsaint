@@ -32,13 +32,15 @@ def main():
     parser.add_option("-T", "--type",
                       dest="msg_type",
                       default="",
-                      help="Mark if notification is from host group or service group, host|service|short-host|short-service")
+                      help="Mark if notification is from host group or service group, "
+                           "host|service|short-host|short-service")
 
     parser.add_option("-n", "--notify",
                       action="store_true",
                       default=False,
                       dest="notify",
-                      help="Whether or not this message should trigger a notification for people in the room")
+                      help="Whether or not this message should trigger a "
+                           "notification for people in the room")
 
     ### Parse command line
     (options, args) = parser.parse_args()
