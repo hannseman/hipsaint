@@ -1,13 +1,14 @@
 import unittest
 import mock
+import json
 from datetime import datetime
-from hipsaint.messages import HipchatMessage
+from .messages import HipchatMessage
 
 
-def setup_mock_request(mock_method, status_code, json):
+def setup_mock_request(mock_method, status_code, json_data):
     mock_response = mock.Mock()
-    mock_response.json.return_value = json
-    mock_response.status_code = status_code
+    mock_response.read.return_value = json.dumps(json_data)
+    mock_response.getcode.return_value = status_code
     mock_method.return_value = mock_response
 
 
@@ -28,7 +29,7 @@ class MessageTest(unittest.TestCase):
         #"$SERVICEDESC$|$HOSTALIAS$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$SERVICESTATE$|$SERVICEOUTPUT$"
         self.service_inputs = 'servicedesc|hostalias|%(longdatetime)s|%(notificationtype)s|127.0.0.1|%(servicestate)s|NAGIOS_OUTPUT'
 
-    @mock.patch('requests.get')
+    @mock.patch('urllib2.urlopen')
     def test_ok_payload_delivery(self, mock_get):
         mock_hipchat_ok_request(mock_get)
         msg_inputs = self.host_inputs % {'longdatetime': datetime.now(),
@@ -36,10 +37,11 @@ class MessageTest(unittest.TestCase):
                                          'hoststate': 'DOWN'}
         problem_msg = HipchatMessage('host', msg_inputs, None, None, None, False)
         response = problem_msg.deliver_payload()
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['status'], 'sent')
+        self.assertEqual(response.getcode(), 200)
+        response_data = json.load(response)
+        self.assertEqual(response_data['status'], 'sent')
 
-    @mock.patch('requests.get')
+    @mock.patch('urllib2.urlopen')
     def test_error_payload_delivery(self, mock_get):
         mock_hipchat_error_request(mock_get)
         msg_inputs = self.host_inputs % {'longdatetime': datetime.now(),
@@ -47,8 +49,9 @@ class MessageTest(unittest.TestCase):
                                          'hoststate': 'DOWN'}
         problem_msg = HipchatMessage('host', msg_inputs, None, None, None, False)
         response = problem_msg.deliver_payload()
-        self.assertEqual(response.status_code, 401)
-        self.assertTrue('error' in response.json())
+        response_data = json.load(response)
+        self.assertEqual(response.getcode(), 401)
+        self.assertTrue('error' in response_data)
 
     def test_render_host(self):
         message_type = 'host'
@@ -91,7 +94,6 @@ class MessageTest(unittest.TestCase):
                                             'notificationtype': 'PROBLEM',
                                             'servicestate': 'WARNING'}
         problem_msg = HipchatMessage(message_type, msg_inputs, None, None, None, False)
-        problem_msg.render_message()
         self.assertEqual(problem_msg.message_color, 'yellow')
 
         msg_inputs = self.service_inputs % {'longdatetime': datetime.now(),

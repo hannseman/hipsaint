@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from optparse import OptionParser
 import hipsaint
-from hipsaint.messages import HipchatMessage
+from ..messages import HipchatMessage
 
 
 def main():
@@ -30,7 +30,7 @@ def main():
                       help="Input variables from Nagios separated by |")
 
     parser.add_option("-T", "--type",
-                      dest="type",
+                      dest="msg_type",
                       default="",
                       help="Mark if notification is from host group or service group, host|service|short-host|short-service")
 
@@ -49,7 +49,7 @@ def main():
         parser.error('--inputs is required')
     if not options.room_id:
         parser.error('--room is required')
-    if not options.type:
+    if not options.msg_type:
         parser.error('--type is required')
     msg = HipchatMessage(**vars(options))
     msg.deliver_payload()
