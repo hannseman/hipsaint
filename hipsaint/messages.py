@@ -22,7 +22,7 @@ class HipchatMessage(object):
         self.user = user
         self.room_id = room_id
         self.notify = notify
-        self.message_color = 'gray'
+        self.message_color = None
 
     def deliver_payload(self, **kwargs):
         """

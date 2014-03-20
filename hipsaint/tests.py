@@ -94,6 +94,7 @@ class MessageTest(unittest.TestCase):
                                             'notificationtype': 'PROBLEM',
                                             'servicestate': 'WARNING'}
         problem_msg = HipchatMessage(message_type, msg_inputs, None, None, None, False)
+        problem_msg.render_message()
         self.assertEqual(problem_msg.message_color, 'yellow')
 
         msg_inputs = self.service_inputs % {'longdatetime': datetime.now(),
