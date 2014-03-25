@@ -33,8 +33,9 @@ Or clone and simply run:
 
     python setup.py install
 
-
-##Usage
+-------
+ Usage
+-------
 
 Assuming you use Nagios 3 add the following sections to commands.cfg with ``<TOKEN>`` and ``<ROOM_ID>`` specified and macros delimited by ``|``::
 
