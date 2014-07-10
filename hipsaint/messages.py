@@ -17,10 +17,9 @@ log = logging.getLogger(__name__)
 
 
 class HipchatMessage(object):
-    url = "https://api.hipchat.com/v1/rooms/message"
     default_color = 'red'
 
-    def __init__(self, msg_type, inputs, token, user, room_id, notify):
+    def __init__(self, msg_type, inputs, token, user, room_id, notify, api_host):
         self.type = msg_type
         self.inputs = inputs
         self.inputs_list = [input.strip() for input in self.inputs.split('|')]
@@ -28,6 +27,7 @@ class HipchatMessage(object):
         self.user = user
         self.room_id = room_id
         self.notify = notify
+	self.url = "https://" + api_host + "/v1/rooms/message"
         self.message_color = 'gray'
 
     def deliver_payload(self, **kwargs):
