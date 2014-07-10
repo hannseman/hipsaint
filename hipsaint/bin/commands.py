@@ -12,7 +12,7 @@ def main():
     parser.add_option("-H", "--host",
                       dest="api_host",
                       default="api.hipchat.com",
-		      help="HipChat Server to deliver message to (default: %(default)s)")
+		      help="HipChat Server to deliver message to (default: api.hipchat.com)")
 
     parser.add_option("-r", "--room",
                       dest="room_id",
