@@ -28,9 +28,9 @@ class HipchatMessage(object):
         self.room_id = room_id
         self.notify = notify
 	if (api_host is None):
-		self.url = "https://api.hipchat.com/v1/rooms/message"
+	    self.url = "https://api.hipchat.com/v1/rooms/message"
 	else:
-		self.url = "https://" + api_host + "/v1/rooms/message"
+	    self.url = "https://" + api_host + "/v1/rooms/message"
         self.message_color = 'gray'
 
     def deliver_payload(self, **kwargs):
