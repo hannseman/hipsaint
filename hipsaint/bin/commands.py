@@ -9,6 +9,11 @@ def main():
 
     parser = OptionParser(usage, version="%%prog v%s" % hipsaint.__version__)
 
+    parser.add_option("-H", "--host",
+                      dest="api_host",
+                      default="api.hipchat.com",
+                      help="HipChat Server to deliver message to (default: api.hipchat.com)")
+
     parser.add_option("-r", "--room",
                       dest="room_id",
                       default="",
