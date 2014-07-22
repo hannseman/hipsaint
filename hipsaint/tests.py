@@ -38,8 +38,8 @@ class MessageTest(unittest.TestCase):
         msg_inputs = self.host_inputs % {'longdatetime': datetime.now(),
                                          'notificationtype': 'PROBLEM',
                                          'hoststate': 'DOWN'}
-        problem_msg = HipchatMessage('host', msg_inputs, None, None, None, False, None)
-        response = problem_msg.deliver_payload()
+        msg = HipchatMessage('host', msg_inputs, None, None, None, False, None)
+        response = msg.deliver_payload()
         self.assertEqual(response.getcode(), 200)
         response_data = json.load(response)
         self.assertEqual(response_data['status'], 'sent')
@@ -55,6 +55,18 @@ class MessageTest(unittest.TestCase):
         response_data = json.load(response)
         self.assertEqual(response.getcode(), 401)
         self.assertTrue('error' in response_data)
+
+    @mock.patch('hipsaint.messages.urlopen')
+    def test_custom_host(self, mock_get):
+        mock_hipchat_ok_request(mock_get)
+        msg_inputs = self.host_inputs % {'longdatetime': datetime.now(),
+                                         'notificationtype': 'PROBLEM',
+                                         'hoststate': 'DOWN'}
+        msg = HipchatMessage('host', msg_inputs, None, None, None, False, 'example.com')
+        self.assertEqual(msg.url, 'https://example.com/v1/rooms/message')
+        msg = HipchatMessage('host', msg_inputs, None, None, None, False, None)
+        self.assertEqual(msg.url, 'https://api.hipchat.com/v1/rooms/message')
+
 
     def test_render_host(self):
         message_type = 'host'
