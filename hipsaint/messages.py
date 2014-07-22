@@ -2,7 +2,7 @@ try:
     # For Python 3.0 and later
     from urllib.request import urlopen
     from urllib.parse import urlencode
-except ImportError as e:
+except ImportError:
     # Fall back to Python 2 urllib2
     from urllib2 import urlopen
     from urllib import urlencode
@@ -22,7 +22,7 @@ class HipchatMessage(object):
     def __init__(self, msg_type, inputs, token, user, room_id, notify, api_host):
         self.type = msg_type
         self.inputs = inputs
-        self.inputs_list = [input.strip() for input in self.inputs.split('|')]
+        self.inputs_list = [inp.strip() for inp in self.inputs.split('|')]
         self.token = token
         self.user = user
         self.room_id = room_id
