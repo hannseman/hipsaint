@@ -87,7 +87,7 @@ class HipchatMessage(object):
             self.message_color = COLORS.get(ntype, self.default_color)
         else:
             self.message_color = COLORS.get(state, self.default_color)
-        nagios_host = socket.gethostname().split('.')[0]
+        nagios_host = socket.gethostname()
 
         template_context.update(nagios_host=nagios_host)
         template = templates[template_type]
