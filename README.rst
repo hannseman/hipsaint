@@ -77,13 +77,13 @@ Create two scripts, one for hosts, one for services :
 
 Don't forget to fill ``<TOKEN>`` and ``<ROOM_ID>``.
 
-Hosts : /etc/icinga2/scripts/hipchat-host-notification.sh
+Hosts : /etc/icinga2/scripts/hipchat-host-notification.sh ::
     
     #!/bin/sh
     
     hipsaint --user=Icinga --token=<TOKEN> --room=<ROOM_ID> --type=host --inputs="$HOSTNAME$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$HOSTSTATE$|$HOSTOUTPUT$" -n
 
-Services : /etc/icinga2/scripts/hipchat-service-notification.sh
+Services : /etc/icinga2/scripts/hipchat-service-notification.sh ::
 
     #!/bin/sh
 
@@ -91,7 +91,7 @@ Services : /etc/icinga2/scripts/hipchat-service-notification.sh
 
 Then you need to tell Icinga to use those scripts :
 
-Create a file called ``hipsaint.conf`` in your ``conf.d`` directory :
+Create a file called ``hipsaint.conf`` in your ``conf.d`` directory ::
 
     /**
      * Hipchat/Hipsaint script for Icinga2
