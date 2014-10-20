@@ -34,7 +34,7 @@ Or clone and simply run:
     python setup.py install
 
 -------
- Usage
+ Usage in Nagios
 -------
 
 Assuming you use Nagios 3 add the following sections to commands.cfg with ``<TOKEN>`` and ``<ROOM_ID>`` specified and macros delimited by ``|``::
@@ -66,3 +66,86 @@ Edit the Nagios contacts.cfg file by adding or editing an existing user and addi
             host_notification_commands      notify-host-by-hipchat
             email   /dev/null
     }
+
+-------
+ Usage in Icinga 2
+-------
+
+To use Hipsaint in Icinga 2, you can create an additional config like this :
+
+Create two scripts, one for hosts, one for services :
+
+Don't forget to fill ``<TOKEN>`` and ``<ROOM_ID>``.
+
+Hosts : /etc/icinga2/scripts/hipchat-host-notification.sh
+    
+    #!/bin/sh
+    
+    hipsaint --user=Icinga --token=<TOKEN> --room=<ROOM_ID> --type=host --inputs="$HOSTNAME$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$HOSTSTATE$|$HOSTOUTPUT$" -n
+
+Services : /etc/icinga2/scripts/hipchat-service-notification.sh
+
+    #!/bin/sh
+
+    hipsaint --user=Icinga --token=<TOKEN> --room=<ROOM_ID> --type=service --inputs="$SERVICEDESC$|$HOSTALIAS$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$SERVICESTATE$|$SERVICEOUTPUT$" -n
+
+Then you need to tell Icinga to use those scripts :
+
+Create a file called ``hipsaint.conf`` in your ``conf.d`` directory :
+
+    /**
+     * Hipchat/Hipsaint script for Icinga2
+     *
+     * Only applied if host/service objects have
+     * the custom attribute `sla` set to `24x7`.
+     */
+
+    object NotificationCommand "notify-host-by-hipchat" {
+      import "plugin-notification-command"
+
+      command = [ "/etc/icinga2/scripts/hipchat-host-notification.sh" ]
+
+      env = {
+        NOTIFICATIONTYPE = "$notification.type$"
+        SERVICEDESC = "$service.name$"
+        HOSTALIAS = "$host.display_name$"
+        HOSTADDRESS = "$address$"
+        SERVICESTATE = "$service.state$"
+        LONGDATETIME = "$icinga.long_date_time$"
+        SERVICEOUTPUT = "$service.output$"
+      }
+    }
+
+    object NotificationCommand "notify-service-by-hipchat" {
+      import "plugin-notification-command"
+
+      command = [ "/etc/icinga2/scripts/hipchat-service-notification.sh" ]
+
+      env = {
+        NOTIFICATIONTYPE = "$notification.type$"
+        SERVICEDESC = "$service.name$"
+        HOSTALIAS = "$host.display_name$"
+        HOSTADDRESS = "$address$"
+        SERVICESTATE = "$service.state$"
+        LONGDATETIME = "$icinga.long_date_time$"
+        SERVICEOUTPUT = "$service.output$"
+      }
+    }
+
+    apply Notification "hipchat-icingaadmin" to Host {
+      command = "notify-host-by-hipchat"
+
+      user_groups = [ "icingaadmins" ]
+
+      assign where host.vars.sla == "24x7"
+    }
+
+    apply Notification "hipchat-icingaadmin" to Service {
+      command = "notify-service-by-hipchat"
+
+      user_groups = [ "icingaadmins" ]
+
+      assign where service.vars.sla == "24x7"
+    }
+
+You want to customize this to your groups and users.
