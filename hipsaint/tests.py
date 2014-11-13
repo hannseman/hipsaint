@@ -1,3 +1,4 @@
+import sys
 import unittest
 import mock
 from datetime import datetime
@@ -38,7 +39,7 @@ class MessageTest(unittest.TestCase):
         msg_inputs = self.host_inputs % {'longdatetime': datetime.now(),
                                          'notificationtype': 'PROBLEM',
                                          'hoststate': 'DOWN'}
-        msg = HipchatMessage('host', msg_inputs, None, None, None, False, None)
+        msg = HipchatMessage('host', msg_inputs, None, None, None, False, None, None)
         response = msg.deliver_payload()
         self.assertEqual(response.getcode(), 200)
         response_data = json.load(response)
@@ -50,7 +51,7 @@ class MessageTest(unittest.TestCase):
         msg_inputs = self.host_inputs % {'longdatetime': datetime.now(),
                                          'notificationtype': 'PROBLEM',
                                          'hoststate': 'DOWN'}
-        problem_msg = HipchatMessage('host', msg_inputs, None, None, None, False, None)
+        problem_msg = HipchatMessage('host', msg_inputs, None, None, None, False, None, None)
         response = problem_msg.deliver_payload()
         response_data = json.load(response)
         self.assertEqual(response.getcode(), 401)
@@ -62,10 +63,42 @@ class MessageTest(unittest.TestCase):
         msg_inputs = self.host_inputs % {'longdatetime': datetime.now(),
                                          'notificationtype': 'PROBLEM',
                                          'hoststate': 'DOWN'}
-        msg = HipchatMessage('host', msg_inputs, None, None, None, False, 'example.com')
+        msg = HipchatMessage('host', msg_inputs, None, None, None, False, 'example.com', None)
         self.assertEqual(msg.url, 'https://example.com/v1/rooms/message')
-        msg = HipchatMessage('host', msg_inputs, None, None, None, False, None)
+        msg = HipchatMessage('host', msg_inputs, None, None, None, False, None, None)
         self.assertEqual(msg.url, 'https://api.hipchat.com/v1/rooms/message')
+
+    @mock.patch('hipsaint.messages.urlopen')
+    def test_api_v2(self, mock_get):
+        mock_hipchat_ok_request(mock_get)
+        msg_inputs = self.host_inputs % {'longdatetime': datetime.now(),
+                                         'notificationtype': 'PROBLEM',
+                                         'hoststate': 'DOWN'}
+        msg = HipchatMessage('host', msg_inputs, 'authtoken', None, 'testroom', False, 'example.com', '2')
+        self.assertEqual(msg.url, 'https://example.com/v2/room/testroom/notification')
+        self.assertEqual(msg.deliver_payload, msg.deliver_payload_v2)
+        response = msg.deliver_payload()
+        self.assertEqual(response.getcode(), 200)
+        response_data = json.load(response)
+        self.assertEqual(response_data['status'], 'sent')
+        # verify that data that was submitted
+        args = mock_get.call_args
+        request = args[0][0]
+        self.assertEqual(request.get_header('Authorization'), 'Bearer authtoken')
+        self.assertEqual(request.get_header('Content-type'), 'application/json')
+        if sys.version_info[0] >= 3 and sys.version_info[1] >= 1:
+            body = request.data
+        else:
+            body = request.get_data()
+        data = json.loads(body.decode('utf-8'))
+        self.assertTrue('color' in data)
+        self.assertTrue('message' in data)
+        self.assertTrue('notify' in data)
+        self.assertTrue('message_format' in data)
+        self.assertEqual(data['color'], 'red')
+        self.assertTrue('PROBLEM' in data['message'])
+        self.assertEqual(data['notify'], False)
+        self.assertEqual(data['message_format'], 'html')
 
 
     def test_render_host(self):
@@ -73,33 +106,33 @@ class MessageTest(unittest.TestCase):
         msg_inputs = self.host_inputs % {'longdatetime': datetime.now(),
                                          'notificationtype': 'PROBLEM',
                                          'hoststate': 'DOWN'}
-        problem_msg = HipchatMessage(message_type, msg_inputs, None, None, None, False, None)
+        problem_msg = HipchatMessage(message_type, msg_inputs, None, None, None, False, None, None)
         problem_msg.render_message()
         self.assertEqual(problem_msg.message_color, 'red')
 
         # Test short host
-        problem_msg = HipchatMessage('short-host', msg_inputs, None, None, None, False, None)
+        problem_msg = HipchatMessage('short-host', msg_inputs, None, None, None, False, None, None)
         problem_msg.render_message()
         self.assertEqual(problem_msg.message_color, 'red')
 
         msg_inputs = self.host_inputs % {'longdatetime': datetime.now(),
                                          'notificationtype': 'RECOVERY',
                                          'hoststate': 'UP'}
-        problem_msg = HipchatMessage(message_type, msg_inputs, None, None, None, False, None)
+        problem_msg = HipchatMessage(message_type, msg_inputs, None, None, None, False, None, None)
         problem_msg.render_message()
         self.assertEqual(problem_msg.message_color, 'green')
 
         msg_inputs = self.host_inputs % {'longdatetime': datetime.now(),
                                          'notificationtype': 'UNREACHABLE',
                                          'hoststate': 'UKNOWN'}
-        problem_msg = HipchatMessage(message_type, msg_inputs, None, None, None, False, None)
+        problem_msg = HipchatMessage(message_type, msg_inputs, None, None, None, False, None, None)
         problem_msg.render_message()
         self.assertEqual(problem_msg.message_color, 'red')
 
         msg_inputs = self.host_inputs % {'longdatetime': datetime.now(),
                                          'notificationtype': 'ACKNOWLEDGEMENT',
                                          'hoststate': 'DOWN'}
-        problem_msg = HipchatMessage(message_type, msg_inputs, None, None, None, False, None)
+        problem_msg = HipchatMessage(message_type, msg_inputs, None, None, None, False, None, None)
         problem_msg.render_message()
         self.assertEqual(problem_msg.message_color, 'purple')
 
@@ -108,39 +141,39 @@ class MessageTest(unittest.TestCase):
         msg_inputs = self.service_inputs % {'longdatetime': datetime.now(),
                                             'notificationtype': 'PROBLEM',
                                             'servicestate': 'WARNING'}
-        problem_msg = HipchatMessage(message_type, msg_inputs, None, None, None, False, None)
+        problem_msg = HipchatMessage(message_type, msg_inputs, None, None, None, False, None, None)
         problem_msg.render_message()
         self.assertEqual(problem_msg.message_color, 'yellow')
 
         msg_inputs = self.service_inputs % {'longdatetime': datetime.now(),
                                             'notificationtype': 'PROBLEM',
                                             'servicestate': 'CRITICAL'}
-        problem_msg = HipchatMessage(message_type, msg_inputs, None, None, None, False, None)
+        problem_msg = HipchatMessage(message_type, msg_inputs, None, None, None, False, None, None)
         problem_msg.render_message()
         self.assertEqual(problem_msg.message_color, 'red')
 
         # Test short service
-        problem_msg = HipchatMessage('short-service', msg_inputs, None, None, None, False, None)
+        problem_msg = HipchatMessage('short-service', msg_inputs, None, None, None, False, None, None)
         problem_msg.render_message()
         self.assertEqual(problem_msg.message_color, 'red')
 
         msg_inputs = self.service_inputs % {'longdatetime': datetime.now(),
                                             'notificationtype': 'PROBLEM',
                                             'servicestate': 'UNKNOWN'}
-        problem_msg = HipchatMessage(message_type, msg_inputs, None, None, None, False, None)
+        problem_msg = HipchatMessage(message_type, msg_inputs, None, None, None, False, None, None)
         problem_msg.render_message()
         self.assertEqual(problem_msg.message_color, 'gray')
 
         msg_inputs = self.service_inputs % {'longdatetime': datetime.now(),
                                             'notificationtype': 'RECOVERY',
                                             'servicestate': 'OK'}
-        problem_msg = HipchatMessage(message_type, msg_inputs, None, None, None, False, None)
+        problem_msg = HipchatMessage(message_type, msg_inputs, None, None, None, False, None, None)
         problem_msg.render_message()
         self.assertEqual(problem_msg.message_color, 'green')
 
         msg_inputs = self.service_inputs % {'longdatetime': datetime.now(),
                                             'notificationtype': 'ACKNOWLEDGEMENT',
                                             'servicestate': 'CRITICAL'}
-        problem_msg = HipchatMessage(message_type, msg_inputs, None, None, None, False, None)
+        problem_msg = HipchatMessage(message_type, msg_inputs, None, None, None, False, None, None)
         problem_msg.render_message()
         self.assertEqual(problem_msg.message_color, 'purple')
