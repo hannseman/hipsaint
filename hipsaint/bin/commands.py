@@ -14,6 +14,11 @@ def main():
                       default="api.hipchat.com",
                       help="HipChat Server to deliver message to (default: api.hipchat.com)")
 
+    parser.add_option("-V", "--api_version",
+                      dest="api_version",
+                      default="1",
+                      help="API version to use, either 1 or 2")
+
     parser.add_option("-r", "--room",
                       dest="room_id",
                       default="",
@@ -22,7 +27,7 @@ def main():
     parser.add_option("-u", "--user",
                       dest="user",
                       default="Nagios",
-                      help="Username to deliver message as")
+                      help="Username to deliver message as, when using API version 1")
 
     parser.add_option("-t", "--token",
                       dest="token",
