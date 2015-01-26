@@ -109,9 +109,9 @@ class HipchatMessage(object):
         on the notification type.
         """
         template_type = self.type
-        if template_type in ('host', 'short-host'):
+        if 'host' in template_type:
             template_context = self.get_host_context()
-        elif template_type in ('service', 'short-service'):
+        elif 'service' in template_type:
             template_context = self.get_service_context()
         else:
             raise Exception('Invalid notification type')
