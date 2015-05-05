@@ -52,6 +52,12 @@ def main():
                       help="Whether or not this message should trigger a "
                            "notification for people in the room")
 
+    parser.add_option("-f", "--format",
+                      default="html",
+                      dest="msg_format",
+                      help="Determines how messages are rendered by HipChat."
+                      "Valid values: html, text. Defaults to html.")
+
     ### Parse command line
     (options, args) = parser.parse_args()
     ### Validate required input
