@@ -19,7 +19,8 @@ log = logging.getLogger(__name__)
 class HipchatMessage(object):
     default_color = 'red'
 
-    def __init__(self, msg_type, inputs, token, user, room_id, notify, api_host, api_version, msg_format):
+    def __init__(self, msg_type, inputs, token, user, room_id, notify, api_host,
+                 api_version, msg_format='html'):
         self.type = msg_type
         self.inputs = inputs
         self.inputs_list = [inp.strip() for inp in self.inputs.split('|')]
