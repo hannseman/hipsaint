@@ -58,6 +58,11 @@ def main():
                       help="Determines how messages are rendered by HipChat."
                       "Valid values: html, text. Defaults to html.")
 
+    parser.add_option("-p", "--proxy",
+                      default="",
+                      dest="proxy",
+                      help="Specify a proxy in the form [user:passwd@]proxy.server:port.")
+
     ### Parse command line
     (options, args) = parser.parse_args()
     ### Validate required input

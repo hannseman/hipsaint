@@ -1,10 +1,16 @@
 try:
     # For Python 3.0 and later
     from urllib.request import urlopen, Request
+    from urllib.request import ProxyHandler
+    from urllib.request import build_opener
+    from urllib.request import install_opener
     from urllib.parse import urlencode
 except ImportError:
     # Fall back to Python 2 urllib2
     from urllib2 import urlopen, Request
+    from urllib2 import ProxyHandler
+    from urllib2 import build_opener
+    from urllib2 import install_opener
     from urllib import urlencode
 import logging
 import socket
@@ -20,7 +26,7 @@ class HipchatMessage(object):
     default_color = 'red'
 
     def __init__(self, msg_type, inputs, token, user, room_id, notify, api_host,
-                 api_version, msg_format='html'):
+                 api_version, proxy=None, msg_format='html'):
         self.type = msg_type
         self.inputs = inputs
         self.inputs_list = [inp.strip() for inp in self.inputs.split('|')]
@@ -34,6 +40,9 @@ class HipchatMessage(object):
         self.urlv2 = 'https://{0}/v2/room/{1}/notification'.format(self.host, self.room_id)
         self.message_color = 'gray'
         self.message_format = msg_format
+        self.proxy = proxy
+        if self.proxy:
+            self.setup_proxy()
         if str(self.api_version) != "2":
             self.url = self.urlv1
             self.deliver_payload = self.deliver_payload_v1
@@ -58,13 +67,7 @@ class HipchatMessage(object):
         message_params = message_params.encode('utf-8')
         raw_response = urlopen(self.urlv1, message_params)
         response_data = json.load(raw_response)
-        if 'error' in response_data:
-            error_message = response_data['error'].get('message')
-            error_type = response_data['error'].get('type')
-            error_code = response_data['error'].get('code')
-            log.error('%s - %s: %s', error_code, error_type, error_message)
-        elif not 'status' in response_data:
-            log.error('Unexpected response')
+        self.validate_response(response_data)
         return raw_response
 
     def deliver_payload_v2(self, **kwargs):
@@ -75,7 +78,7 @@ class HipchatMessage(object):
         message_body = self.render_message()
         message = {'message': message_body,
                    'color': self.message_color,
-                   'notify': True if int(self.notify) > 0 else False,
+                   'notify': int(self.notify) > 0,
                    'message_format': self.message_format}
         message_params = json.dumps(message)
         message_params = message_params.encode('utf-8')
@@ -85,25 +88,51 @@ class HipchatMessage(object):
         raw_response = urlopen(request)
         if raw_response.getcode() / 100 != 2:
             response_data = json.load(raw_response)
-            if 'error' in response_data:
-                error_message = response_data['error'].get('message')
-                error_type = response_data['error'].get('type')
-                error_code = response_data['error'].get('code')
-                log.error('%s - %s: %s', error_code, error_type, error_message)
-            elif not 'status' in response_data:
-                log.error('Unexpected response')
+            self.validate_response(response_data)
         return raw_response
+
+    def validate_response(self, response_data):
+        """
+        Check response for errors and log them
+        """
+        if 'error' in response_data:
+            error_message = response_data['error'].get('message')
+            error_type = response_data['error'].get('type')
+            error_code = response_data['error'].get('code')
+            log.error('%s - %s: %s', error_code, error_type, error_message)
+        elif 'status' not in response_data:
+            log.error('Unexpected response')
+
+    def setup_proxy(self):
+        """
+        Setup http proxy
+        """
+        proxy = ProxyHandler({'https': self.proxy})
+        opener = build_opener(proxy)
+        install_opener(opener)
 
     def get_host_context(self):
         hostname, timestamp, ntype, hostaddress, state, hostoutput = self.inputs_list
-        return {'hostname': hostname, 'timestamp': timestamp, 'ntype': ntype,
-                'hostaddress': hostaddress, 'state': state, 'hostoutput': hostoutput}
+        return {
+            'hostname': hostname,
+            'timestamp': timestamp,
+            'ntype': ntype,
+            'hostaddress': hostaddress,
+            'state': state,
+            'hostoutput': hostoutput
+        }
 
     def get_service_context(self):
         servicedesc, hostalias, timestamp, ntype, hostaddress, state, serviceoutput = self.inputs_list
-        return {'servicedesc': servicedesc, 'hostalias': hostalias, 'timestamp': timestamp,
-                'ntype': ntype, 'hostaddress': hostaddress, 'state': state,
-                'serviceoutput': serviceoutput}
+        return {
+            'servicedesc': servicedesc,
+            'hostalias': hostalias,
+            'timestamp': timestamp,
+            'ntype': ntype,
+            'hostaddress': hostaddress,
+            'state': state,
+            'serviceoutput': serviceoutput
+        }
 
     def render_message(self):
         """

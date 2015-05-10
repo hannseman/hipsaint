@@ -39,7 +39,8 @@ class MessageTest(unittest.TestCase):
         msg_inputs = self.host_inputs % {'longdatetime': datetime.now(),
                                          'notificationtype': 'PROBLEM',
                                          'hoststate': 'DOWN'}
-        msg = HipchatMessage('host', msg_inputs, None, None, None, False, None, None)
+        msg = HipchatMessage('host', msg_inputs,
+                             None, None, None, False, None, None, proxy='example.com')
         response = msg.deliver_payload()
         self.assertEqual(response.getcode(), 200)
         response_data = json.load(response)
