@@ -79,15 +79,15 @@ Don't forget to fill ``<TOKEN>`` and ``<ROOM_ID>``.
 
 Hosts : /etc/icinga2/scripts/hipchat-host-notification.sh ::
     
-    #!/bin/sh
+    #!/bin/bash
     
-    hipsaint --user=Icinga --token=<TOKEN> --room=<ROOM_ID> --type=host --inputs="$HOSTNAME$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$HOSTSTATE$|$HOSTOUTPUT$" -n
+    hipsaint --user=Icinga --token=<TOKEN> --room=<ROOM_ID> --type=host --inputs="$HOSTNAME|$LONGDATETIME|$NOTIFICATIONTYPE|$HOSTADDRESS|$HOSTSTATE|$HOSTOUTPUT" -n
 
 Services : /etc/icinga2/scripts/hipchat-service-notification.sh ::
 
-    #!/bin/sh
+    #!/bin/bash
 
-    hipsaint --user=Icinga --token=<TOKEN> --room=<ROOM_ID> --type=service --inputs="$SERVICEDESC$|$HOSTALIAS$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$SERVICESTATE$|$SERVICEOUTPUT$" -n
+    hipsaint --user=Icinga --token=<TOKEN> --room=<ROOM_ID> --type=service --inputs="$SERVICEDESC|$HOSTALIAS|$LONGDATETIME|$NOTIFICATIONTYPE|$HOSTADDRESS|$SERVICESTATE|$SERVICEOUTPUT" -n
 
 Then you need to tell Icinga to use those scripts :
 
