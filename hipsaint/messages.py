@@ -37,7 +37,7 @@ class HipchatMessage(object):
         self.host = api_host or 'api.hipchat.com'
         self.api_version = api_version
         self.urlv1 = 'https://{0}/v1/rooms/message'.format(self.host)
-        self.urlv2 = 'https://{0}/v2/room/{1}/notification'.format(self.host, self.room_id)
+        self.urlv2 = 'https://{0}/v2/room/{1}/message'.format(self.host, self.room_id)
         self.message_color = 'gray'
         self.message_format = msg_format
         self.proxy = proxy
