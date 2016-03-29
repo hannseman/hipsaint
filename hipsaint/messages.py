@@ -61,7 +61,8 @@ class HipchatMessage(object):
                    'message': message_body,
                    'color': self.message_color,
                    'notify': int(self.notify),
-                   'auth_token': self.token}
+                   'auth_token': self.token,
+                   'message_format': self.message_format}
         message.update(kwargs)
         message_params = urlencode(message)
         message_params = message_params.encode('utf-8')
