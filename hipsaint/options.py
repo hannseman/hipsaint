@@ -6,6 +6,7 @@ COLORS = {
     'WARNING': 'yellow',
     'UNKNOWN': 'gray',
     'CRITICAL': 'red',
+    'FLAPPINGEND': 'green',
     'FLAPPINGSTOP': 'green',
     'FLAPPINGDISABLED': 'purple',
     'DOWNTIMESTART': 'red',
