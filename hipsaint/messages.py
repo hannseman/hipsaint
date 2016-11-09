@@ -5,6 +5,7 @@ try:
     from urllib.request import build_opener
     from urllib.request import install_opener
     from urllib.parse import urlencode
+    from urllib.parse import quote
 except ImportError:
     # Fall back to Python 2 urllib2
     from urllib2 import urlopen, Request
@@ -12,6 +13,7 @@ except ImportError:
     from urllib2 import build_opener
     from urllib2 import install_opener
     from urllib import urlencode
+    from urllib import quote
 import logging
 import socket
 import json
@@ -32,7 +34,9 @@ class HipchatMessage(object):
         self.inputs_list = [inp.strip() for inp in self.inputs.split('|')]
         self.token = token
         self.user = user
-        self.room_id = room_id
+        self.room_id = None
+        if room_id:
+            self.room_id = quote(room_id)
         self.notify = notify
         self.host = api_host or 'api.hipchat.com'
         self.api_version = api_version

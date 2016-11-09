@@ -7,7 +7,7 @@ Push your nagios notifications to HipChat using a simple command line tool.
 .. image:: https://travis-ci.org/hannseman/hipsaint.png?branch=master
   :target: https://travis-ci.org/hannseman/hipsaint
    
-.. image:: https://pypip.in/d/hipsaint/badge.png
+.. image:: https://img.shields.io/pypi/dm/hipsaint.svg
   :target: https://pypi.python.org/pypi/hipsaint
 
 Implements `HipChat message API`_.
@@ -41,11 +41,11 @@ Assuming you use Nagios 3 add the following sections to commands.cfg with ``<TOK
 
     define command {
         command_name    notify-host-by-hipchat
-        command_line    hipsaint --token=<TOKEN> --room=<ROOM_ID> --type=host --inputs="$HOSTNAME$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$HOSTSTATE$|$HOSTOUTPUT$" -n
+        command_line    hipsaint -V 2 -token=<TOKEN> --room=<ROOM_ID> --type=host --inputs="$HOSTNAME$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$HOSTSTATE$|$HOSTOUTPUT$" -n
     }
     define command {
         command_name    notify-service-by-hipchat
-        command_line    hipsaint --token=<TOKEN> --room=<ROOM_ID> --type=service --inputs="$SERVICEDESC$|$HOSTALIAS$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$SERVICESTATE$|$SERVICEOUTPUT$" -n
+        command_line    hipsaint -V 2 --token=<TOKEN> --room=<ROOM_ID> --type=service --inputs="$SERVICEDESC$|$HOSTALIAS$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$SERVICESTATE$|$SERVICEOUTPUT$" -n
     }
 
 To send less verbose messages to hipchat set the ``--type`` flag to either ``short-host`` or ``short-service``.
