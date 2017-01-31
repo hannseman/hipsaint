@@ -10,5 +10,6 @@ COLORS = {
     'FLAPPINGSTOP': 'green',
     'FLAPPINGDISABLED': 'purple',
     'DOWNTIMESTART': 'red',
-    'DOWNTIMESTOP': 'green'
+    'DOWNTIMESTOP': 'green',
+    'DOWNTIMEEND': 'green'
 }
