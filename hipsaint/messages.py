@@ -154,7 +154,7 @@ class HipchatMessage(object):
 
         ntype = template_context['ntype']
         state = template_context['state']
-        if ntype != 'PROBLEM':
+        if ntype != 'PROBLEM' and ntype != 'CUSTOM':
             self.message_color = COLORS.get(ntype, self.default_color)
         else:
             self.message_color = COLORS.get(state, self.default_color)

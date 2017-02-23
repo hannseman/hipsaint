@@ -1,6 +1,7 @@
 COLORS = {
     'PROBLEM': 'red',
     'RECOVERY': 'green',
+    'UP': 'green',
     'ACKNOWLEDGEMENT': 'purple',
     'FLAPPINGSTART': 'yellow',
     'WARNING': 'yellow',
