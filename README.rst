@@ -41,7 +41,7 @@ Assuming you use Nagios 3 add the following sections to commands.cfg with ``<TOK
 
     define command {
         command_name    notify-host-by-hipchat
-        command_line    hipsaint -V 2 -token=<TOKEN> --room=<ROOM_ID> --type=host --inputs="$HOSTNAME$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$HOSTSTATE$|$HOSTOUTPUT$" -n
+        command_line    hipsaint -V 2 --token=<TOKEN> --room=<ROOM_ID> --type=host --inputs="$HOSTNAME$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$HOSTSTATE$|$HOSTOUTPUT$" -n
     }
     define command {
         command_name    notify-service-by-hipchat
