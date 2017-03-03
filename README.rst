@@ -83,11 +83,21 @@ Hosts : /etc/icinga2/scripts/hipchat-host-notification.sh ::
     
     hipsaint --user=Icinga --token=<TOKEN> --room=<ROOM_ID> --type=host --inputs="$HOSTNAME|$LONGDATETIME|$NOTIFICATIONTYPE|$HOSTADDRESS|$HOSTSTATE|$HOSTOUTPUT" -n
 
+ or
+ 
+ hipsaint -V 2 --token=<TOKEN> --room=<ROOM_ID> --type=host --inputs="$HOSTNAME|$LONGDATETIME|$NOTIFICATIONTYPE|$HOSTADDRESS|$HOSTSTATE|$HOSTOUTPUT" -n
+
+
+
 Services : /etc/icinga2/scripts/hipchat-service-notification.sh ::
 
     #!/bin/bash
 
     hipsaint --user=Icinga --token=<TOKEN> --room=<ROOM_ID> --type=service --inputs="$SERVICEDESC|$HOSTALIAS|$LONGDATETIME|$NOTIFICATIONTYPE|$HOSTADDRESS|$SERVICESTATE|$SERVICEOUTPUT" -n
+    
+ or
+     hipsaint -V 2 --token=<TOKEN> --room=<ROOM_ID> --type=service --inputs="$SERVICEDESC|$HOSTALIAS|$LONGDATETIME|$NOTIFICATIONTYPE|$HOSTADDRESS|$SERVICESTATE|$SERVICEOUTPUT" -n
+ 
 
 Then you need to tell Icinga to use those scripts :
 
@@ -106,13 +116,12 @@ Create a file called ``hipsaint.conf`` in your ``conf.d`` directory ::
       command = [ "/etc/icinga2/scripts/hipchat-host-notification.sh" ]
 
       env = {
-        NOTIFICATIONTYPE = "$notification.type$"
-        SERVICEDESC = "$service.name$"
-        HOSTALIAS = "$host.display_name$"
-        HOSTADDRESS = "$address$"
-        SERVICESTATE = "$service.state$"
-        LONGDATETIME = "$icinga.long_date_time$"
-        SERVICEOUTPUT = "$service.output$"
+         HOSTNAME = "$host.name$"
+         LONGDATETIME = "$icinga.long_date_time$"
+         NOTIFICATIONTYPE = "$notification.type$"
+         HOSTADDRESS = "$address$"
+         HOSTSTATE = "$host.state$"
+         HOSTOUTPUT = "$host.output$"
       }
     }
 
@@ -122,12 +131,12 @@ Create a file called ``hipsaint.conf`` in your ``conf.d`` directory ::
       command = [ "/etc/icinga2/scripts/hipchat-service-notification.sh" ]
 
       env = {
-        NOTIFICATIONTYPE = "$notification.type$"
         SERVICEDESC = "$service.name$"
         HOSTALIAS = "$host.display_name$"
+        LONGDATETIME = "$icinga.long_date_time$"
+        NOTIFICATIONTYPE = "$notification.type$"
         HOSTADDRESS = "$address$"
         SERVICESTATE = "$service.state$"
-        LONGDATETIME = "$icinga.long_date_time$"
         SERVICEOUTPUT = "$service.output$"
       }
     }
